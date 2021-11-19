@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+        <title>WebGazer demo page</title>
+        <link rel="stylesheet" href="main.css">
+        <script type="text/javascript" src="webgazer/webgazer.js"></script>
+    </head>
+    <body>
+        <iframe class="youtube" width="1080" height="608" src="https://www.youtube.com/embed/5wpqDcpPNgs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <div class="btn_wrapper">
+            <button onclick="recordgazedata()">Start Gaze</button>
+            <button id="p0", onclick="pause()", disabled>Pause</button>
+            <button id="p1", onclick="resume()", disabled>Resume</button>
+            <button id="p2", onclick="savegazedata()", disabled>Write to CSV</button>
+        </div>
+        <div class="fixpos", id="fixedarea">Not started</div>
+
+        <script>
+            var x = [];
+
+            function roundn(num, n) {
+                return (Math.round(num * Math.pow(10, n)) / Math.pow(10, n)).toString().padStart(8, ' ');
+            }
+
+            function recordgazedata() {
+                if (document.getElementById("p0").disabled == true) {
+                    document.getElementById("p0").removeAttribute("disabled");
+                }
+                if (document.getElementById("p2").disabled == true) {
+                    document.getElementById("p2").removeAttribute("disabled");
+                }
+                //webgazer.params.showGazeDot = true;
+                gazeDot = document.createElement('div');
+                gazeDot.id = webgazer.params.gazeDotId;
+                gazeDot.style.background = 'yellow';
+
+                webgazer.setGazeListener(function(data, elapsedTime) {
+                    if (data == null) {
+                        return;
+                    }
+                    var xprediction = data.x;
+                    var yprediction = data.y;
+
+                    var pred_pos = "x="+xprediction+", y="+yprediction;
+
+                    x.push([xprediction, yprediction]);
+
+                    var curpos = document.getElementById("fixedarea");
+                    curpos.innerText = "x ="+roundn(xprediction, 1)+"\ny ="+roundn(yprediction, 1);
+
+                    console.log(pred_pos);
+                }).begin();
+            }
+
+            function pause() {
+                document.getElementById("p0").disabled = true;
+                document.getElementById("p1").removeAttribute("disabled");
+                webgazer.pause();
+            }
+
+            function resume() {
+                document.getElementById("p1").disabled = true;
+                document.getElementById("p0").removeAttribute("disabled");
+                webgazer.resume();
+            }
+
+            function savegazedata() {
+                var csv = '';
+                x.forEach(function (row) {
+                    csv += row.join(',');
+                    csv += "\n";
+                });
+
+                var csvElem = document.createElement('a');
+                csvElem.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                csvElem.target = '_blank'; // リンクをクリックした後、別のウィンドウで開く形式。
+                csvElem.download = 'gazedata.csv';
+                csvElem.click();
+            }
+        </script>
+    </body>
+</html>
