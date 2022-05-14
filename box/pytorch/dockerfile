@@ -1,0 +1,10 @@
+FROM pytorch/pytorch
+RUN apt-get update && apt-get upgrade -y
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y tzdata
+RUN apt-get install -y libopencv-dev
+RUN apt-get install -y libgl1-mesa-dev
+RUN pip install -U pip
+RUN pip install jupyter scipy matplotlib opencv-python sklearn
+RUN pip install pandas
+CMD ["jupyter", "notebook", "--allow-root", "--port", "8888", "--ip", "0.0.0.0"]

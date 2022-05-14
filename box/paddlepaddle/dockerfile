@@ -1,0 +1,9 @@
+FROM paddlepaddle/paddle
+RUN apt-get update && apt-get upgrade -y
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y tzdata
+RUN apt-get install -y libopencv-dev
+RUN apt-get install -y libgl1-mesa-dev
+RUN pip install -U pip
+RUN pip install jupyter scipy matplotlib opencv-python sklearn pandas
+CMD ["git", "clone", "https://github.com/PaddlePaddle/PaddleGAN"]
