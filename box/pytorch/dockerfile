@@ -1,9 +1,25 @@
-FROM pytorch/pytorch
+FROM pytorch/pytorch:1.5.1-cuda10.1-cudnn7-devel
 RUN apt-get update && apt-get upgrade -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    tzdata \
-    libopencv-dev \
-    libgl1-mesa-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata 
 RUN pip install -U pip
-RUN pip install jupyter scipy matplotlib opencv-python sklearn pandas jupyterlab
+RUN pip install jupyter jupyterlab
+RUN pip install Pillow == 8.3.1
+RUN pip install absl_py == 0.13.0
+RUN pip install apex == 0.1
+RUN pip install bert-score == 0.3.10
+RUN pip install filelock == 3.0.12
+RUN pip install lorem == 0.1.1
+RUN pip install luigi == 3.0.3
+RUN pip install lxml == 4.6.3
+RUN pip install nltk == 3.4.5
+RUN pip install numpy == 1.20.3
+RUN pip install packaging == 21.0
+RUN pip install pandas == 0.25.2
+RUN pip install py_rouge == 1.1
+RUN pip install requests == 2.26.0
+RUN pip install sacremoses == 0.0.45
+RUN pip install scikit_learn == 0.23.2
+RUN pip install tokenizers == 0.8.1rc1
+RUN pip install tqdm == 4.61.2
+RUN pip install transformers == 3.0.2
 CMD ["jupyter", "lab", "--allow-root", "--port", "8888", "--ip", "0.0.0.0"]
