@@ -1,0 +1,2 @@
+model_checkpoint_path: "vgg16_custom_notop.ckpt"
+all_model_checkpoint_paths: "vgg16_custom_notop.ckpt"
