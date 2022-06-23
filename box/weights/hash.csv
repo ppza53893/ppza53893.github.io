@@ -1,0 +1,6 @@
+name,md5
+vgg16_custom_notop.h5,82015704a6d00cc47bf1468264193f6b
+vgg16_custom_notop_v2.h5,89fa315e62923b922d0e6ae1e8f814ae
+vgg16_norm.h5,b42cb41a0729690a8e3606a36c8080d9
+vgg19_gatys.h5,ced0f27a311b43e31c75010ee2624a4c
+vgg19_norm.h5,54731675bd84f6051b96bb4c32fa1b7a
