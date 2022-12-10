@@ -8,7 +8,13 @@
     </head>
     <body>
         <iframe class="youtube" width="1080" height="608" src="https://www.youtube.com/embed/5wpqDcpPNgs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+        // youtubの左上と右下の位置, webgazerのxとyとその取得時刻, 現在のスクリーンサイズ、等々
+        // 2つのcsv(座標とyoutube動画のイベント情報)についての2つのcsvが欲しい(11/22のmtgより)
+        // TODO(2021/11/22): プレイした瞬間の時刻を取り出す
+        // ボタン押された時にプレイ開始
+        // 押した瞬間と止めた瞬間の時刻を入手
+        // そのときに、ビデオ
+        // youtubeの動画の位置 -> element経由でframeの位置を取得したい
         <div class="btn_wrapper">
             <button onclick="recordgazedata()">Start Gaze</button>
             <button id="p0", onclick="pause()", disabled>Pause</button>
@@ -43,7 +49,7 @@
                     var xprediction = data.x;
                     var yprediction = data.y;
 
-                    var pred_pos = "x="+xprediction+", y="+yprediction;
+                    var pred_pos = "x="+xprediction+", y="+yprediction; // TODO(2021/11/22): 各座標を取得した時間のデータも追加する
 
                     x.push([xprediction, yprediction]);
 
@@ -66,8 +72,20 @@
                 webgazer.resume();
             }
 
+            function zeropadding(pad_size, num) {
+                return (Math.pow(10, pad_size) + num).toString().slice(1);
+            }
+
             function savegazedata() {
                 var csv = '';
+                // TODO:タイムスタンプを追加
+                //      フォーマット(YYYYMMDDHHMMSS, nnn) ※zero埋め必要
+                // 
+                var date_now = new Date();
+                
+                var date_str = date_now.getFullYear() + '' + (date_now.getMonth() + 1) + '' + date_now.getDate() + '' + date_now.getHours() + '' + date_now.getMinutes() + '' + date_now.getSeconds() + ',' + date_now.getMilliseconds() + '\n';
+                csv += date_str;
+                console.log(date_str);
                 x.forEach(function (row) {
                     csv += row.join(',');
                     csv += "\n";
@@ -75,7 +93,7 @@
 
                 var csvElem = document.createElement('a');
                 csvElem.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-                csvElem.target = '_blank'; // リンクをクリックした後、別のウィンドウで開く形式。
+                csvElem.target = '_blank'; 
                 csvElem.download = 'gazedata.csv';
                 csvElem.click();
             }
